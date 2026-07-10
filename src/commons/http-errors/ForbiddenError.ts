@@ -1,6 +1,6 @@
 import httpStatus from 'http-status';
-import HttpError from './HttpError';
-import messages from '../messages';
+import HttpError from '@/commons/http-errors/HttpError';
+import messages from '@/commons/messages';
 
 export default class ForbiddenError extends HttpError {
   constructor(message = messages.httpMessage[403]) {

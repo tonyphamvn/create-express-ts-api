@@ -6,6 +6,13 @@ module.exports = {
   },
   extends: ['airbnb-base', 'plugin:prettier/recommended', 'plugin:import/typescript'],
   plugins: ['no-only-tests'],
+  settings: {
+    'import/resolver': {
+      typescript: {
+        project: './tsconfig.json',
+      },
+    },
+  },
   rules: {
     'max-len': 0, // specify the maximum length of a line in your program (off by default)
     'no-eval': 0, // disallow use of eval()

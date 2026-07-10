@@ -2,12 +2,12 @@ import express, { Application } from 'express';
 import compress from 'compression';
 import cors from 'cors';
 import helmet from 'helmet';
-import RequestLogger from './helpers/logger';
-import { Environment } from '../configs';
-import indexRouter from './routes/index';
-import { errorHandler } from './middlewares/errorHandler';
-import requestValidationHandler from './helpers/requestValidationHandler';
-import SocketServer from './libs/socket';
+import RequestLogger from '@/helpers/logger';
+import { Environment } from '@config';
+import indexRouter from '@/routes/index';
+import { errorHandler } from '@/middlewares/errorHandler';
+import requestValidationHandler from '@/helpers/requestValidationHandler';
+import SocketServer from '@/libs/socket';
 
 class App {
   private app: Application;

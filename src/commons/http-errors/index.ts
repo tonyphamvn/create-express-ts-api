@@ -1,9 +1,9 @@
-import BadGatewayError from './BadGatewayError';
-import BadRequestError from './BadRequestError';
-import ConflictError from './ConflictError';
-import EntityNotFoundError from './EntityNotFoundError';
-import ForbiddenError from './ForbiddenError';
-import UnauthorizedError from './UnauthorizedError';
+import BadGatewayError from '@/commons/http-errors/BadGatewayError';
+import BadRequestError from '@/commons/http-errors/BadRequestError';
+import ConflictError from '@/commons/http-errors/ConflictError';
+import EntityNotFoundError from '@/commons/http-errors/EntityNotFoundError';
+import ForbiddenError from '@/commons/http-errors/ForbiddenError';
+import UnauthorizedError from '@/commons/http-errors/UnauthorizedError';
 
 export {
   BadGatewayError,

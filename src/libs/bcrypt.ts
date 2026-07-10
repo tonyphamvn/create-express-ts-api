@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import config from '../../configs';
+import config from '@config';
 
 class Bcrypt {
   private salt: string;

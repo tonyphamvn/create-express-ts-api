@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import App from './app';
+import App from '@/app';
 
 const app = new App({
   port: parseInt(process.env.PORT || '4000'),

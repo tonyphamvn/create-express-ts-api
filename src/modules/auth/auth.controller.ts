@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { responseSuccess } from '../../helpers/response';
-import AuthService from './auth.service';
-import { BadRequestError } from '../../commons/http-errors';
+import { responseSuccess } from '@/helpers/response';
+import AuthService from '@/modules/auth/auth.service';
+import { BadRequestError } from '@/commons/http-errors';
 class AuthController {
   private authService: AuthService;
 

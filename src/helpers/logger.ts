@@ -1,12 +1,12 @@
 import winston from 'winston';
 import dayjs from 'dayjs';
 import expressWinston from 'express-winston';
-import config, { Environment } from '../../configs';
+import config, { Environment } from '@config';
 
 const { combine, timestamp, printf, colorize, align, simple, prettyPrint } = winston.format;
 
 const logFormat = printf((info: winston.Logform.TransformableInfo): string => {
-  return `${info.level} [${dayjs(info.timestamp).format('MM-DD-YYYY HH:mm:ss')}] : ${info.message}`;
+  return `${info.level} [${dayjs(info.timestamp as string).format('MM-DD-YYYY HH:mm:ss')}] : ${info.message}`;
 });
 
 const createLoggerForEnv = (environment: string) => {

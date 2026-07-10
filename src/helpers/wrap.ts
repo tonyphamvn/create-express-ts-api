@@ -5,7 +5,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 import util from 'util';
-import { logger } from './logger';
+import { logger } from '@/helpers/logger';
 
 export default (callback: any) => async (req: Request, res: Response, next: NextFunction) => {
   try {

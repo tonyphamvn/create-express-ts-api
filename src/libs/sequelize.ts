@@ -1,6 +1,6 @@
 import { Sequelize, Dialect } from 'sequelize';
 import pg from 'pg';
-import config from '../../configs';
+import config from '@config';
 
 const { database } = config;
 

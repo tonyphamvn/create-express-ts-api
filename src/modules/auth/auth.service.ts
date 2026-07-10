@@ -1,8 +1,8 @@
-import { AuthResponse, UserModel, UserStatic } from '../../interfaces/user.d';
-import { generateToken } from '../../libs/passports';
-import userModel from '../../models/user.model';
-import Bcrypt from '../../libs/bcrypt';
-import { EntityNotFoundError } from '../../commons/http-errors';
+import { AuthResponse, UserModel, UserStatic } from '@/interfaces/user.d';
+import { generateToken } from '@/libs/passports';
+import userModel from '@/models/user.model';
+import Bcrypt from '@/libs/bcrypt';
+import { EntityNotFoundError } from '@/commons/http-errors';
 
 class AuthService {
   private userModel: UserStatic;

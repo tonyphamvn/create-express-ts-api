@@ -1,9 +1,9 @@
 import passportJWT from 'passport-jwt';
-import * as jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import { PassportStatic } from 'passport';
-import env from '../../configs';
-import { UserAttributes } from '../interfaces/user.d';
-import UserModel from '../models/user.model';
+import env from '@config';
+import { UserAttributes } from '@/interfaces/user.d';
+import UserModel from '@/models/user.model';
 
 const { ExtractJwt } = passportJWT;
 const JwtStrategy = passportJWT.Strategy;
@@ -30,7 +30,9 @@ export function passportConfiguration(passport: PassportStatic) {
 }
 
 export function generateToken(user: UserAttributes): string {
-  return jwt.sign({ id: user.id, email: user.email }, env.jwtSecret, {
-    expiresIn: env.jwtExpiresIn,
-  });
+  const options: SignOptions = {
+    expiresIn: (env.jwtExpiresIn ?? '1d') as SignOptions['expiresIn'],
+  };
+
+  return jwt.sign({ id: user.id, email: user.email }, env.jwtSecret as string, options);
 }
