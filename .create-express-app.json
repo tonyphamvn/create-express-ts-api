@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "template": "express-ts-boilerplate",
+  "repository": "tonyphamvn/express-ts-boilerplate",
+  "features": ["database", "jwt", "docker", "redis", "git"]
+}

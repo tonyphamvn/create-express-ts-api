@@ -20,6 +20,19 @@ module.exports = {
       },
     },
   },
+  overrides: [
+    {
+      files: ['packages/create-express-app/**/*.js'],
+      rules: {
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            packageDir: ['./packages/create-express-app'],
+          },
+        ],
+      },
+    },
+  ],
   rules: {
     'max-len': 0, // specify the maximum length of a line in your program (off by default)
     'no-eval': 0, // disallow use of eval()

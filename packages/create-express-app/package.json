@@ -1,0 +1,40 @@
+{
+  "name": "create-express-ts-app",
+  "version": "1.0.0",
+  "description": "Scaffold an Express + TypeScript API from the express-template boilerplate",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-express-ts-app": "./bin/create-express-app.js"
+  },
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "express",
+    "typescript",
+    "boilerplate",
+    "template",
+    "scaffold",
+    "sequelize",
+    "postgres",
+    "create-express-ts-app"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lamtungp/express-template.git",
+    "directory": "packages/create-express-app"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.10.1",
+    "degit": "^2.8.4",
+    "giget": "^2.0.0"
+  }
+}
