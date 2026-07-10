@@ -1,22 +1,36 @@
-version: '3.5'
-
 services:
   redis:
-    image: redis:latest
+    image: redis:7.0-alpine
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:6379
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    command: /bin/sh -c "redis-server --requirepass $$REDIS_PASSWORD"
+    restart: always
 
   db:
     image: postgres:14
     ports:
-      - "5432:5432"
+      - ${DB_PORT}:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB_MAIN: ${DB_MAIN_NAME}
+      POSTGRES_DB_TEST: ${DB_TEST_NAME}
       PGDATA: /var/lib/postgresql/data
-      POSTGRES_DB_DEV: dbdev
-      POSTGRES_DB_TEST: dbtest
     volumes:
-      - ./.docker/services/db/data:/var/lib/postgresql/data
-      - ./.docker/services/db/volume:/docker-entrypoint-initdb.d
+      - pg_data:/var/lib/postgresql/data
+      - ./scripts/initdb.sh:/docker-entrypoint-initdb.d/initdb.sh
+    healthcheck:
+      test: ["pg_isready", "-U", "postgres", "-d", "${DB_MAIN_NAME}"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     restart: always
+
+volumes:
+  redis_data:
+  pg_data:

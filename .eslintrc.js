@@ -7,8 +7,15 @@ module.exports = {
   extends: ['airbnb-base', 'plugin:prettier/recommended', 'plugin:import/typescript'],
   plugins: ['no-only-tests'],
   settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
     'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
       typescript: {
+        alwaysTryTypes: true,
         project: './tsconfig.json',
       },
     },

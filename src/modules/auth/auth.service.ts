@@ -1,4 +1,4 @@
-import { AuthResponse, UserModel, UserStatic } from '@/interfaces/user.d';
+import { AuthResponse, UserModel, UserStatic } from '@/interfaces/user';
 import { generateToken } from '@/libs/passports';
 import userModel from '@/models/user.model';
 import Bcrypt from '@/libs/bcrypt';

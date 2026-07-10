@@ -1,5 +1,5 @@
 import { DataTypes, Sequelize } from 'sequelize';
-import { UserStatic } from '@/interfaces/user.d';
+import { UserStatic } from '@/interfaces/user';
 import sequelizeInstance from '@/libs/sequelize';
 
 const UserModel = function (sequelize: Sequelize): UserStatic {

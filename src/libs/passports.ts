@@ -2,7 +2,7 @@ import passportJWT from 'passport-jwt';
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { PassportStatic } from 'passport';
 import env from '@config';
-import { UserAttributes } from '@/interfaces/user.d';
+import { UserAttributes } from '@/interfaces/user';
 import UserModel from '@/models/user.model';
 
 const { ExtractJwt } = passportJWT;
