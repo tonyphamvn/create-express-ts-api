@@ -3,7 +3,7 @@ import jwt, { SignOptions } from 'jsonwebtoken';
 import { PassportStatic } from 'passport';
 import config from '@config';
 import { UserAttributes } from '@/types/user.types';
-import { getEM } from '@/libs/mikroorm';
+import { getEM } from '@/libs/mikro-orm';
 import { User } from '@/entities/User';
 
 const { ExtractJwt } = passportJWT;

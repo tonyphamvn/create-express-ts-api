@@ -1,6 +1,6 @@
 import { AuthResponse, UserAttributes } from '@/types/user.types';
 import { generateToken } from '@/libs/passport';
-import { getEM } from '@/libs/mikroorm';
+import { getEM } from '@/libs/mikro-orm';
 import { User } from '@/entities/User';
 import Bcrypt from '@/libs/bcrypt';
 import { EntityNotFoundError } from '@/shared/errors';

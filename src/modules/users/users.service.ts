@@ -1,4 +1,4 @@
-import { getEM } from '@/libs/mikroorm';
+import { getEM } from '@/libs/mikro-orm';
 import { User } from '@/entities/User';
 
 class UsersService {

@@ -24,6 +24,9 @@
     "boilerplate",
     "template",
     "scaffold",
+    "mikroorm",
+    "prisma",
+    "typeorm",
     "sequelize",
     "postgres",
     "generate-express-ts-starter"

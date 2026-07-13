@@ -1,160 +1,197 @@
-# express-template
+## Express TS Boilerplate
 
-[![Express Logo](https://i.cloudup.com/zfY6lL7eFa-3000x3000.png)](http://expressjs.com/)
+Scaffold and ship an Express + TypeScript API with one command.
 
-Fast, unopinionated, minimalist web framework for [node](http://nodejs.org).
+- [Creating an App](#creating-an-app) – How to create a new API with the CLI.
+- [Developing This Repo](#developing-this-repo) – Work on the template locally.
+- [Available Scripts](#available-scripts) – Commands in a generated (or template) project.
 
-[![NPM Version][npm-image]][npm-url]
-[![NPM Downloads][downloads-image]][downloads-url]
-[![Linux Build][ci-image]][ci-url]
-[![Windows Build][appveyor-image]][appveyor-url]
-[![Test Coverage][coveralls-image]][coveralls-url]
+This repository contains:
 
-```js
-const express = require('express');
-const app = express();
+1. The **API template** (default: MikroORM + PostgreSQL)
+2. The **`generate-express-ts-starter`** npm package under `packages/create-express-app`
 
-app.get('/', function (req, res) {
-  res.send('Hello World');
-});
+Create Express TS apps with no manual ORM/auth/Docker wiring.
 
-app.listen(3000);
+## Quick Overview
+
+```sh
+npx generate-express-ts-starter my-api
+cd my-api
+npm install
+docker compose up -d
+npm run db:migrate
+npm run dev
 ```
 
-## Installation
+Then open [http://localhost:4000/api/v1](http://localhost:4000/api/v1).
 
-This is a [Node.js](https://nodejs.org/en/) module available through the
-[npm registry](https://www.npmjs.com/).
+_([npx](https://docs.npmjs.com/cli/v10/commands/npx) comes with npm 5.2+.)_
 
-Before installing, [download and install Node.js](https://nodejs.org/en/download/).
-Node.js 0.10 or higher is required.
+### Get Started Immediately
 
-If this is a brand new project, make sure to create a `package.json` first with
-the [`npm init` command](https://docs.npmjs.com/creating-a-package-json-file).
+You **don’t** need to assemble Express, TypeScript, an ORM, JWT, and Docker yourself.<br>
+They are preconfigured so you can focus on your routes and domain logic.
 
-Installation is done using the
-[`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
+Create a project, and you’re good to go.
 
-```bash
-$ npm install express
+## Creating an App
+
+**You’ll need Node.js 18 or later** on your local development machine. We recommend the latest LTS. You can use [nvm](https://github.com/nvm-sh/nvm) (macOS/Linux) or [nvm-windows](https://github.com/coreybutler/nvm-windows) to switch Node versions between different projects.
+
+Docker is optional but recommended for PostgreSQL/MySQL.
+
+To create a new app, you may choose one of the following methods:
+
+### npx
+
+```sh
+npx generate-express-ts-starter my-api
 ```
 
-Follow [our installing guide](http://expressjs.com/en/starter/installing.html)
-for more information.
+### npm
 
-## Features
-
-- Robust routing
-- Focus on high performance
-- Super-high test coverage
-- HTTP helpers (redirection, caching, etc)
-- View system supporting 14+ template engines
-- Content negotiation
-- Executable for generating applications quickly
-
-## Docs & Community
-
-- [Website and Documentation](http://expressjs.com/) - [[website repo](https://github.com/expressjs/expressjs.com)]
-- [#express](https://webchat.freenode.net/?channels=express) on freenode IRC
-- [GitHub Organization](https://github.com/expressjs) for Official Middleware & Modules
-- Visit the [Wiki](https://github.com/expressjs/express/wiki)
-- [Google Group](https://groups.google.com/group/express-js) for discussion
-- [Gitter](https://gitter.im/expressjs/express) for support and discussion
-
-**PROTIP** Be sure to read [Migrating from 3.x to 4.x](https://github.com/expressjs/express/wiki/Migrating-from-3.x-to-4.x) as well as [New features in 4.x](https://github.com/expressjs/express/wiki/New-features-in-4.x).
-
-### Security Issues
-
-If you discover a security vulnerability in Express, please see [Security Policies and Procedures](Security.md).
-
-## Quick Start
-
-The quickest way to get started with express is to utilize the executable [`express(1)`](https://github.com/expressjs/generator) to generate an application as shown below:
-
-Install the executable. The executable's major version will match Express's:
-
-```bash
-$ npm install -g express-generator@4
+```sh
+npm init generate-express-ts-starter my-api
 ```
 
-Create the app:
+_`npm init <initializer>` is available in npm 6+_
 
-```bash
-$ express /tmp/foo && cd /tmp/foo
+### Yarn
+
+```sh
+yarn create generate-express-ts-starter my-api
 ```
 
-Install dependencies:
+It will create a directory called `my-api` inside the current folder.<br>
+Inside that directory, it will generate the initial project structure.
 
-```bash
-$ npm install
+Skip interactive prompts with defaults (MikroORM, PostgreSQL, JWT, Docker):
+
+```sh
+npx generate-express-ts-starter my-api --yes
 ```
 
-Start the server:
+Or customize:
 
-```bash
-$ npm start
+```sh
+npx generate-express-ts-starter my-api --yes --orm prisma --database mysql
+npx generate-express-ts-starter my-api --yes --orm typeorm --no-jwt --no-docker
 ```
 
-View the website at: http://localhost:3000
+See full CLI docs in [`packages/create-express-app/README.md`](packages/create-express-app/README.md).
+
+Once generation is done, open your project folder:
+
+```sh
+cd my-api
+npm install
+docker compose up -d
+npm run db:migrate
+npm run dev
+```
+
+### Folder Structure
+
+A typical generated app (MikroORM default) looks like this:
+
+```text
+my-api
+├── README.md
+├── package.json
+├── tsconfig.json
+├── docker-compose.yml
+├── Dockerfile
+├── mikro-orm.config.ts
+├── .env
+├── .env.example
+└── src
+    ├── app.ts
+    ├── index.ts
+    ├── config/
+    ├── entities/
+    ├── libs/
+    ├── modules/
+    │   ├── auth/
+    │   └── users/
+    ├── database/
+    │   └── migrations/
+    ├── middlewares/
+    ├── routes/
+    └── shared/
+```
+
+No complicated folder structures — only the files you need to build your API.
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm run dev`
+
+Runs migrations, then starts the API in development mode with Nodemon.<br>
+Open [http://localhost:4000/api/v1](http://localhost:4000/api/v1).
+
+The server reloads if you change the code.
+
+### `npm run db:migrate`
+
+Applies pending database migrations.
+
+### `npm run migration:generate`
+
+Generates a new migration via the selected ORM CLI.
+
+### `npm run build`
+
+Compiles TypeScript into `dist`.
+
+### `npm start`
+
+Runs the production build with PM2.
+
+### `npm run lint`
+
+Lints TypeScript sources under `src`.
+
+## Developing This Repo
+
+To work on the template itself (not a scaffolded app):
+
+```sh
+cp .env.example .env
+npm install
+docker compose up -d
+npm run db:migrate
+npm run dev
+```
+
+Test the CLI against this checkout:
+
+```sh
+node packages/create-express-app/bin/create-express-app.js my-api --local --yes
+```
 
 ## Philosophy
 
-The Express philosophy is to provide small, robust tooling for HTTP servers, making
-it a great solution for single page applications, websites, hybrids, or public
-HTTP APIs.
+- **One command:** Get a working Express + TypeScript API without wiring the stack yourself.
+- **No configuration required to start:** Defaults (MikroORM, PostgreSQL, JWT, Docker) are production-shaped and ready to run.
+- **Choose your ORM:** MikroORM, Sequelize, Prisma, or TypeORM at scaffold time.
+- **Your code, your project:** After generation there is no proprietary runtime — edit everything freely.
 
-Express does not force you to use any specific ORM or template engine. With support for over
-14 template engines via [Consolidate.js](https://github.com/tj/consolidate.js),
-you can quickly craft your perfect framework.
+## What’s Included?
 
-## Examples
+Your environment will have everything you need to build a modern Express API:
 
-To view the examples, clone the Express repo and install the dependencies:
-
-```bash
-$ git clone git://github.com/expressjs/express.git --depth 1
-$ cd express
-$ npm install
-```
-
-Then run whichever example you want:
-
-```bash
-$ node examples/content-negotiation
-```
-
-## Tests
-
-To run the test suite, first install the dependencies, then run `npm test`:
-
-```bash
-$ npm install
-$ npm test
-```
-
-## Contributing
-
-[Contributing Guide](Contributing.md)
-
-## People
-
-The original author of Express is [TJ Holowaychuk](https://github.com/tj)
-
-The current lead maintainer is [Douglas Christopher Wilson](https://github.com/dougwilson)
-
-[List of all contributors](https://github.com/expressjs/express/graphs/contributors)
+- Express 4 + TypeScript
+- MikroORM by default (overlays for Sequelize, Prisma, TypeORM)
+- PostgreSQL / MySQL / SQLite
+- Optional JWT auth (Passport + bcrypt)
+- Optional Docker Compose and Dockerfile
+- Optional Redis + Socket.IO
+- Migration scripts (`db:migrate`, `migration:generate`)
+- Winston logging and ESLint/Prettier baseline
 
 ## License
 
-[MIT](LICENSE)
-
-[ci-image]: https://img.shields.io/github/workflow/status/expressjs/express/ci/master.svg?label=linux
-[ci-url]: https://github.com/expressjs/express/actions?query=workflow%3Aci
-[npm-image]: https://img.shields.io/npm/v/express.svg
-[npm-url]: https://npmjs.org/package/express
-[downloads-image]: https://img.shields.io/npm/dm/express.svg
-[downloads-url]: https://npmcharts.com/compare/express?minimal=true
-[appveyor-image]: https://img.shields.io/appveyor/ci/dougwilson/express/master.svg?label=windows
-[appveyor-url]: https://ci.appveyor.com/project/dougwilson/express
-[coveralls-image]: https://img.shields.io/coveralls/expressjs/express/master.svg
-[coveralls-url]: https://coveralls.io/r/expressjs/express?branch=master
+MIT

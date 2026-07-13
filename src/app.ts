@@ -15,11 +15,11 @@ class App {
   public port: number;
   public apiPrefix = '/api/v1';
 
-  constructor(appInit: { port: number; middleWares: any[] }) {
+  constructor(appInit: { port: number; middlewares: any[] }) {
     this.app = express();
     this.port = appInit.port;
     this.assets();
-    this.middleWares(appInit.middleWares);
+    this.middlewares(appInit.middlewares);
     this.initPassport();
     this.initRoutes();
     this.handleError();
@@ -34,9 +34,9 @@ class App {
     }
   }
 
-  private middleWares(middleWares: any[]) {
-    middleWares.forEach((middleWare) => {
-      this.app.use(middleWare);
+  private middlewares(mws: any[]) {
+    mws.forEach((mw) => {
+      this.app.use(mw);
     });
   }
 

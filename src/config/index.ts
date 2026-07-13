@@ -10,6 +10,21 @@ export const Environment = {
 
 type AppEnvironment = (typeof Environment)[keyof typeof Environment];
 
+export type DatabaseDialect = 'postgres' | 'mysql' | 'sqlite';
+
+export type DatabaseConfig = {
+  username: string;
+  password: string;
+  database: string;
+  host: string;
+  port: number;
+  dialect: DatabaseDialect;
+  storage?: string;
+  pool?: typeof poolConfig;
+  logging: boolean;
+  timezone: string;
+};
+
 const poolConfig = {
   max: 100,
   min: 0,
@@ -29,14 +44,15 @@ function resolveDatabaseName(env: AppEnvironment): string {
   return process.env.DB_NAME_DEV || process.env.DB_MAIN_NAME || 'dbdev';
 }
 
-function buildDatabaseConfig(env: AppEnvironment) {
+function buildDatabaseConfig(env: AppEnvironment): DatabaseConfig {
   return {
     username: process.env.DB_MAIN_USER || 'postgres',
     password: process.env.DB_MAIN_PASSWORD || 'postgres',
     database: resolveDatabaseName(env),
     host: process.env.DB_MAIN_HOST || 'localhost',
     port: parseInt(process.env.DB_MAIN_PORT || process.env.DB_PORT || '5432', 10),
-    dialect: 'postgres' as const,
+    dialect: 'postgres',
+    storage: process.env.DB_STORAGE,
     pool: process.env.ENABLE_CONNECTION_POOL === 'true' ? poolConfig : undefined,
     logging: process.env.NODE_ENV === Environment.Development,
     timezone: '+00:00',

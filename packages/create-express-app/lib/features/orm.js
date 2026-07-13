@@ -187,11 +187,70 @@ export class Migration20220225111250 extends Migration {
   );
 }
 
+async function writePrismaClient(targetDir, database) {
+  let content;
+
+  if (database === 'mysql') {
+    content = `import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from '@/generated/prisma/client';
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
+
+const url = new URL(connectionString);
+const adapter = new PrismaMariaDb({
+  host: url.hostname,
+  port: Number(url.port || 3306),
+  user: decodeURIComponent(url.username),
+  password: decodeURIComponent(url.password),
+  database: url.pathname.replace(/^\\//, ''),
+});
+const prisma = new PrismaClient({ adapter });
+
+export default prisma;
+`;
+  } else if (database === 'sqlite') {
+    content = `import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaClient } from '@/generated/prisma/client';
+
+const connectionString = process.env.DATABASE_URL || 'file:./database/dev.sqlite';
+const adapter = new PrismaBetterSqlite3({ url: connectionString });
+const prisma = new PrismaClient({ adapter });
+
+export default prisma;
+`;
+  } else {
+    content = `import { PrismaPg } from '@prisma/adapter-pg';
+import { PrismaClient } from '@/generated/prisma/client';
+
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
+
+const adapter = new PrismaPg({ connectionString });
+const prisma = new PrismaClient({ adapter });
+
+export default prisma;
+`;
+  }
+
+  await fs.writeFile(path.join(targetDir, 'src/libs/prisma.ts'), content);
+}
+
 async function applyPrismaDialect(targetDir, database) {
   await patchFile(targetDir, 'prisma/schema.prisma', (content) =>
-    content.replace(/provider\s*=\s*"[^"]+"/, `provider = "${prismaProvider(database)}"`),
+    content.replace(
+      /(datasource\s+db\s*\{[\s\S]*?provider\s*=\s*")[^"]+(")/,
+      `$1${prismaProvider(database)}$2`,
+    ),
   );
 
+  await writePrismaClient(targetDir, database);
   await writePrismaMigration(targetDir, database);
 
   await patchFile(targetDir, '.env.example', (content) => {
@@ -200,6 +259,13 @@ async function applyPrismaDialect(targetDir, database) {
       return content.replace(/DATABASE_URL=.*/, url.trim());
     }
     return `${content.trimEnd()}\n\n${url}`;
+  });
+
+  await patchFile(targetDir, '.gitignore', (content) => {
+    if (content.includes('src/generated')) {
+      return content;
+    }
+    return `${content.trimEnd()}\n\nsrc/generated\n`;
   });
 }
 
@@ -328,13 +394,32 @@ export function getOrmDependencies(orm, database) {
   }
 
   if (selectedOrm === 'prisma') {
+    let adapterAdd = {
+      '@prisma/adapter-pg': '^7.6.0',
+      pg: '^8.14.1',
+    };
+
+    if (database === 'mysql') {
+      adapterAdd = {
+        '@prisma/adapter-mariadb': '^7.6.0',
+        mariadb: '^3.4.0',
+      };
+    } else if (database === 'sqlite') {
+      adapterAdd = {
+        '@prisma/adapter-better-sqlite3': '^7.6.0',
+        'better-sqlite3': '^11.8.1',
+      };
+    }
+
     return {
       add: {
-        '@prisma/client': '^6.5.0',
+        '@prisma/client': '^7.6.0',
+        ...adapterAdd,
       },
-      remove: MIKRO_PACKAGES,
+      remove: [...MIKRO_PACKAGES, 'reflect-metadata'],
       devDependencies: {
-        prisma: '^6.5.0',
+        prisma: '^7.6.0',
+        ...(database === 'postgres' ? { '@types/pg': '^8.11.11' } : {}),
       },
       scripts: {
         'db:migrate': 'prisma migrate deploy',
