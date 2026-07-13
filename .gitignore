@@ -28,3 +28,5 @@ yarn-error.log*
 packages/create-express-app/node_modules
 packages/create-express-app/test-*
 test-scaffold
+
+src/database/migrations/*.json

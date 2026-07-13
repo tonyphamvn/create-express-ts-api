@@ -11,14 +11,14 @@ services:
     restart: always
 
   db:
-    image: postgres:14
+    image: postgres:14-alpine
     ports:
       - ${DB_MAIN_PORT}:5432
     environment:
       POSTGRES_USER: ${DB_MAIN_USER}
       POSTGRES_PASSWORD: ${DB_MAIN_PASSWORD}
-      POSTGRES_DB_MAIN: ${DB_NAME_DEV}
-      POSTGRES_DB_TEST: ${DB_NAME_TEST}
+      POSTGRES_DB_MAIN: ${DB_MAIN_NAME}
+      POSTGRES_DB_TEST: ${DB_TEST_NAME}
       PGDATA: /var/lib/postgresql/data
     volumes:
       - pg_data:/var/lib/postgresql/data
