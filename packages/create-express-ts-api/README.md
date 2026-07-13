@@ -85,7 +85,7 @@ npx generate-express-ts-starter my-api --yes --orm typeorm --no-jwt --no-docker
 | `--docker` / `--no-docker` | Include Docker files | on |
 | `--redis` / `--no-redis` | Include Redis + Socket.IO deps | off |
 | `--git` / `--no-git` | Initialize a git repository | on |
-| `--package-manager <pm>` | `npm` \| `pnpm` \| `yarn` | `npm` |
+| `--package-manager <pm>` | `npm` \| `pnpm` \| `yarn` \| `bun` | `npm` |
 | `-h`, `--help` | Show help | |
 
 A typical generated project looks like this (MikroORM default):

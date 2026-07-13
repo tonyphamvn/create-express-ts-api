@@ -108,6 +108,7 @@ export async function collectProjectOptions(argvOptions) {
         { value: 'npm', label: 'npm' },
         { value: 'pnpm', label: 'pnpm' },
         { value: 'yarn', label: 'yarn' },
+        { value: 'bun', label: 'bun' },
       ],
     }),
   );

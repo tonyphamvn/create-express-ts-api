@@ -3,6 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as p from '@clack/prompts';
 import { DEFAULT_GIGET_TEMPLATE, DEFAULT_TEMPLATE_REPO } from '../lib/constants.js';
 import {
   assertTargetIsEmpty,
@@ -12,6 +13,7 @@ import {
 import { downloadProjectTemplate } from '../lib/download-template.js';
 import { collectProjectOptions } from '../lib/prompts.js';
 import { postProcessProject } from '../lib/post-process.js';
+import { installDependencies } from '../lib/install.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -95,7 +97,7 @@ Options:
   --docker / --no-docker    Include Docker files
   --redis / --no-redis      Include Redis + Socket.IO deps
   --git / --no-git          Initialize git repository
-  --package-manager <pm>    npm | pnpm | yarn
+  --package-manager <pm>    npm | pnpm | yarn | bun
   --provider <name>         degit | giget
   --template <source>       Template source (default: ${DEFAULT_TEMPLATE_REPO})
   --local                   Copy template from local repo (development)
@@ -110,19 +112,19 @@ Examples:
 }
 
 function printNextSteps(projectName, options) {
-  const installCommand = {
-    npm: 'npm install',
-    pnpm: 'pnpm install',
-    yarn: 'yarn install',
+  const runCommand = {
+    npm: 'npm run',
+    pnpm: 'pnpm',
+    yarn: 'yarn',
+    bun: 'bun run',
   }[options.packageManager];
 
   const lines = [
     '',
-    `Done. Created ${projectName}.`,
+    `🎉 Done. Created ${projectName}.`,
     '',
-    'Next steps:',
+    '🚀 Next steps:',
     `  cd ${projectName}`,
-    `  ${installCommand}`,
   ];
 
   if (options.docker) {
@@ -130,10 +132,10 @@ function printNextSteps(projectName, options) {
   }
 
   if (options.database !== 'sqlite' || options.docker) {
-    lines.push('  npm run db:migrate');
+    lines.push(`  ${runCommand} db:migrate`);
   }
 
-  lines.push('  npm run dev', '');
+  lines.push(`  ${runCommand} dev`, '');
   console.log(lines.join('\n'));
 }
 
@@ -169,21 +171,35 @@ async function main() {
 
   const targetDir = path.resolve(process.cwd(), options.projectName);
   await assertTargetIsEmpty(targetDir);
-  await fs.mkdir(targetDir, { recursive: true });
 
-  if (options.local) {
-    const templateRoot = path.resolve(__dirname, '../../..');
-    await copyLocalTemplate(templateRoot, targetDir);
-  } else {
-    await downloadProjectTemplate({
-      provider: options.provider,
-      template: options.template,
-      targetDir,
-      local: false,
-    });
+  const s = p.spinner();
+  s.start('Setting up');
+
+  try {
+    await fs.mkdir(targetDir, { recursive: true });
+
+    if (options.local) {
+      const templateRoot = path.resolve(__dirname, '../../..');
+      await copyLocalTemplate(templateRoot, targetDir);
+    } else {
+      await downloadProjectTemplate({
+        provider: options.provider,
+        template: options.template,
+        targetDir,
+        local: false,
+      });
+    }
+
+    await postProcessProject(targetDir, options);
+
+    s.message(`Installing dependencies via ${options.packageManager}`);
+    await installDependencies(targetDir, options.packageManager);
+
+    s.stop('Setting up');
+  } catch (error) {
+    s.stop('Setting up', 1);
+    throw error;
   }
-
-  await postProcessProject(targetDir, options);
 
   // Print after open handles (e.g. degit) drain so "Done" appears right before exit
   process.once('beforeExit', () => {
