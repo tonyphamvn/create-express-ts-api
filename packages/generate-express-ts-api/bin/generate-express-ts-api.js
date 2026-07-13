@@ -119,13 +119,7 @@ function printNextSteps(projectName, options) {
     bun: 'bun run',
   }[options.packageManager];
 
-  const lines = [
-    '',
-    `🎉 Done. Created ${projectName}.`,
-    '',
-    '🚀 Next steps:',
-    `  cd ${projectName}`,
-  ];
+  const lines = ['', '🚀 Next steps:', `  cd ${projectName}`];
 
   if (options.docker) {
     lines.push('  docker compose up -d');
@@ -195,9 +189,9 @@ async function main() {
     s.message(`Installing dependencies via ${options.packageManager}`);
     await installDependencies(targetDir, options.packageManager);
 
-    s.stop('Setting up');
+    s.stop(`🎉 Done. Created ${options.projectName} project.`);
   } catch (error) {
-    s.stop('Setting up', 1);
+    s.stop('Setup failed', 1);
     throw error;
   }
 
