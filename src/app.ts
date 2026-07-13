@@ -1,3 +1,4 @@
+import http from 'http';
 import express, { Application } from 'express';
 import compress from 'compression';
 import cors from 'cors';
@@ -9,6 +10,7 @@ import indexRouter from '@/routes/index';
 import { errorHandler } from '@/middlewares/errorHandler';
 import requestValidationHandler from '@/shared/request-validation-handler';
 import { configurePassport } from '@/libs/passport';
+import { initSocket } from '@/libs/socket';
 
 class App {
   private app: Application;
@@ -57,11 +59,18 @@ class App {
     this.app.use(errorHandler);
   }
 
-  public listen() {
-    this.app.listen(this.port, () => {
-      if (process.env.NODE_ENV !== Environment.Production) {
-        console.log('Server is listening at port', this.port);
-      }
+  public async listen() {
+    const server = http.createServer(this.app);
+
+    await initSocket(server);
+
+    await new Promise<void>((resolve) => {
+      server.listen(this.port, () => {
+        if (process.env.NODE_ENV !== Environment.Production) {
+          console.log('Server is listening at port', this.port);
+        }
+        resolve();
+      });
     });
   }
 }

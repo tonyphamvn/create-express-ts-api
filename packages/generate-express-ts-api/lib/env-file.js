@@ -16,9 +16,9 @@ export async function writeEnvFile(targetDir, options) {
 
   if (!options.redis) {
     content = content
-      .replace(/\nSOCKET_PORT=.*\n/, '\n')
       .replace(/\nREDIS_URI=.*\n/, '\n')
-      .replace(/\nREDIS_PORT=.*\n/, '\n');
+      .replace(/\nREDIS_PORT=.*\n/, '\n')
+      .replace(/\nREDIS_PASSWORD=.*\n/, '\n');
   }
 
   await fs.writeFile(envExamplePath, content);
