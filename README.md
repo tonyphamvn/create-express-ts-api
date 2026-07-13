@@ -76,7 +76,7 @@ Or customize:
 
 ```sh
 npx generate-express-ts-api my-api --yes --orm prisma --database mysql
-npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --no-docker
+npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --deploy none
 ```
 
 See full CLI docs in [`packages/generate-express-ts-api/README.md`](packages/generate-express-ts-api/README.md).
@@ -187,7 +187,8 @@ Your environment will have everything you need to build a modern Express API:
 - MikroORM by default (overlays for Sequelize, Prisma, TypeORM)
 - PostgreSQL / MySQL / SQLite
 - Optional JWT auth (Passport + bcrypt)
-- Optional Docker Compose and Dockerfile
+- Optional production runtime: Docker (Dockerfile) or PM2
+- Optional Docker Compose for DB/Redis
 - Optional Redis + Socket.IO
 - Migration scripts (`db:migrate`, `migration:generate`)
 - Winston logging and ESLint/Prettier baseline

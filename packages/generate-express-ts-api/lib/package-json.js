@@ -2,6 +2,10 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { getAuthDependencies } from './features/auth.js';
 import { getDatabaseDependencies } from './features/database.js';
+import {
+  getDeployDependencies,
+  getDeployScripts,
+} from './features/deploy.js';
 import { getOrmDependencies } from './features/orm.js';
 import { getRedisDependencies } from './features/redis.js';
 
@@ -65,9 +69,11 @@ export async function updatePackageJson(targetDir, options) {
     getDatabaseDependencies(options.database, options.orm),
     getAuthDependencies(options.jwt),
     getRedisDependencies(options.redis),
+    getDeployDependencies(options.deploy),
   ]);
 
   updated = applyOrmScripts(updated, ormChanges.scripts);
+  updated = applyOrmScripts(updated, getDeployScripts(options.deploy));
 
   if (options.orm === 'mikroorm') {
     updated['mikro-orm'] = {

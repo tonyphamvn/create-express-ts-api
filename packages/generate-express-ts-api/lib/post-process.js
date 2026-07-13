@@ -3,7 +3,7 @@ import path from 'node:path';
 import { applyDatabaseFeature } from './features/database.js';
 import { applyOrmFeature } from './features/orm.js';
 import { removeAuthFeature } from './features/auth.js';
-import { removeDockerFeature } from './features/docker.js';
+import { applyDeployFeature } from './features/deploy.js';
 import { removeRedisFeature } from './features/redis.js';
 import { writeEnvFile } from './env-file.js';
 import { updatePackageJson } from './package-json.js';
@@ -36,9 +36,7 @@ export async function postProcessProject(targetDir, options) {
     await removeAuthFeature(targetDir);
   }
 
-  if (!options.docker) {
-    await removeDockerFeature(targetDir);
-  }
+  await applyDeployFeature(targetDir, options.deploy || (options.docker ? 'docker' : 'none'));
 
   if (!options.redis) {
     await removeRedisFeature(targetDir);

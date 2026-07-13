@@ -13,14 +13,29 @@ function handleCancel(value) {
   return value;
 }
 
+function resolveDeploy(argvOptions) {
+  if (argvOptions.deploy) {
+    return argvOptions.deploy;
+  }
+
+  if (argvOptions.docker === false) {
+    return 'none';
+  }
+
+  return 'docker';
+}
+
 export async function collectProjectOptions(argvOptions) {
   if (argvOptions.yes) {
+    const deploy = resolveDeploy(argvOptions);
+
     return {
       projectName: argvOptions.projectName,
       orm: argvOptions.orm,
       database: argvOptions.database,
       jwt: argvOptions.jwt,
-      docker: argvOptions.docker,
+      deploy,
+      docker: deploy === 'docker',
       redis: argvOptions.redis,
       git: argvOptions.git,
       packageManager: argvOptions.packageManager,
@@ -79,10 +94,27 @@ export async function collectProjectOptions(argvOptions) {
     }),
   );
 
-  const docker = handleCancel(
-    await p.confirm({
-      message: 'Include Docker files?',
-      initialValue: argvOptions.docker,
+  const deploy = handleCancel(
+    await p.select({
+      message: 'Production runtime',
+      initialValue: resolveDeploy(argvOptions),
+      options: [
+        {
+          value: 'docker',
+          label: 'Docker',
+          hint: 'Dockerfile + compose',
+        },
+        {
+          value: 'pm2',
+          label: 'PM2',
+          hint: 'VPS process manager; keep compose for DB/Redis',
+        },
+        {
+          value: 'none',
+          label: 'Neither',
+          hint: 'plain node dist/index.js',
+        },
+      ],
     }),
   );
 
@@ -131,7 +163,8 @@ export async function collectProjectOptions(argvOptions) {
     orm,
     database,
     jwt,
-    docker,
+    deploy,
+    docker: deploy === 'docker',
     redis,
     git,
     packageManager,

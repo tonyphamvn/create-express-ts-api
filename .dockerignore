@@ -1,1 +1,15 @@
-./node_modules
+node_modules
+dist
+.git
+.github
+.cursor
+.vscode
+packages
+coverage
+*.md
+.env
+.env.*
+!.env.example
+npm-debug.log*
+yarn-error.log*
+.DS_Store

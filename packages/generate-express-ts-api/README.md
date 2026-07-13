@@ -71,7 +71,8 @@ Customize during scaffold:
 
 ```sh
 npx generate-express-ts-api my-api --yes --orm prisma --database mysql
-npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --no-docker
+npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --deploy none
+npx generate-express-ts-api my-api --yes --deploy pm2
 ```
 
 #### Options
@@ -82,7 +83,9 @@ npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --no-docker
 | `--orm <name>`             | `mikroorm` \| `sequelize` \| `prisma` \| `typeorm` | `mikroorm` |
 | `--database <type>`        | `postgres` \| `mysql` \| `sqlite`                  | `postgres` |
 | `--jwt` / `--no-jwt`       | Include JWT auth module                            | on         |
-| `--docker` / `--no-docker` | Include Docker files                               | on         |
+| `--deploy <mode>`          | `docker` \| `pm2` \| `none`                        | `docker`   |
+| `--docker` / `--no-docker` | Alias for `--deploy docker` / `--deploy none`      | —          |
+| `--pm2`                    | Alias for `--deploy pm2`                           | —          |
 | `--redis` / `--no-redis`   | Include Redis + Socket.IO deps                     | off        |
 | `--git` / `--no-git`       | Initialize a git repository                        | on         |
 | `--package-manager <pm>`   | `npm` \| `pnpm` \| `yarn` \| `bun`                 | `npm`      |
@@ -180,7 +183,8 @@ Your environment will have everything you need to build a modern Express API:
 - MikroORM by default (or Sequelize / Prisma / TypeORM)
 - PostgreSQL, MySQL, or SQLite
 - Optional JWT auth (Passport + bcrypt)
-- Optional Docker Compose (+ Dockerfile)
+- Optional production runtime: Docker (Dockerfile) or PM2
+- Optional Docker Compose for DB/Redis
 - Optional Redis + Socket.IO
 - Migrations wired to `npm run db:migrate`
 - Winston / express-winston logging
