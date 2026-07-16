@@ -73,6 +73,8 @@ Customize during scaffold:
 npx generate-express-ts-api my-api --yes --orm prisma --database mysql
 npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --deploy none
 npx generate-express-ts-api my-api --yes --deploy pm2
+npx generate-express-ts-api my-api --yes --provider giget
+npx generate-express-ts-api my-api --yes --package-manager pnpm
 ```
 
 #### Options
@@ -136,6 +138,16 @@ npm install
 ```
 
 Inside the newly created project, you can run the built-in commands below.
+
+### Package Manager Notes
+
+Generated projects include Express 5 type overrides so `express-validation` does not pull incompatible Express 4 types:
+
+- npm uses `overrides` in `package.json`
+- Yarn uses `resolutions` in `package.json`
+- pnpm 11+ uses `overrides` in `pnpm-workspace.yaml`
+
+When using `--provider giget`, the CLI downloads the GitHub repository directly and skips the `giget` template registry.
 
 ## Available Scripts
 
@@ -211,8 +223,8 @@ Issues and PRs are welcome in the [generate-express-ts-api](https://github.com/t
 3. Tag and push:
 
 ```sh
-git tag v0.0.4
-git push origin v0.0.4
+git tag v0.0.5
+git push origin v0.0.5
 ```
 
 The [Release](../../.github/workflows/release.yml) workflow will:

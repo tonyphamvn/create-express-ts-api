@@ -77,6 +77,8 @@ Or customize:
 ```sh
 npx generate-express-ts-api my-api --yes --orm prisma --database mysql
 npx generate-express-ts-api my-api --yes --orm typeorm --no-jwt --deploy none
+npx generate-express-ts-api my-api --yes --provider giget
+npx generate-express-ts-api my-api --yes --package-manager pnpm
 ```
 
 See full CLI docs in [`packages/generate-express-ts-api/README.md`](packages/generate-express-ts-api/README.md).
@@ -130,6 +132,12 @@ my-api
 ```
 
 The template keeps bootstrapping, domain modules, infrastructure adapters, and shared utilities separate so the project can grow without moving files around immediately.
+
+When using Express 5 with `express-validation`, generated apps include package-manager-specific type overrides:
+
+- npm: `overrides` in `package.json`
+- Yarn: `resolutions` in `package.json`
+- pnpm 11+: `overrides` in `pnpm-workspace.yaml`
 
 ## Available Scripts
 
