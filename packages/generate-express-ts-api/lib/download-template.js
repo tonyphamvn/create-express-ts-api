@@ -14,6 +14,16 @@ function normalizeDegitSource(template) {
   return template;
 }
 
+function normalizeGigetSource(template) {
+  const source = template || DEFAULT_GIGET_TEMPLATE;
+
+  if (/^[\w.-]+\/[\w.-]+(?:[#/].*)?$/.test(source)) {
+    return `github:${source}`;
+  }
+
+  return source;
+}
+
 export async function downloadProjectTemplate({ provider, template, targetDir, local }) {
   if (local) {
     return;
@@ -29,8 +39,9 @@ export async function downloadProjectTemplate({ provider, template, targetDir, l
     return;
   }
 
-  await downloadTemplate(template || DEFAULT_GIGET_TEMPLATE, {
+  await downloadTemplate(normalizeGigetSource(template), {
     dir: targetDir,
     force: true,
+    registry: false,
   });
 }
