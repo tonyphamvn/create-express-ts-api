@@ -11,6 +11,10 @@ const MIKRO_PATHS = [
   'src/infrastructure/database/migrations',
 ];
 
+function escapeForTemplateLiteral(value) {
+  return value.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+}
+
 async function removeIfExists(targetPath) {
   await fs.rm(targetPath, { recursive: true, force: true });
 }
@@ -156,11 +160,11 @@ export class AddTableUser20220225111250 implements MigrationInterface {
   name = 'AddTableUser20220225111250';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(\`${usersCreateSql(database).replace(/`/g, '\\`')}\`);
+    await queryRunner.query(\`${escapeForTemplateLiteral(usersCreateSql(database))}\`);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(\`${usersDropSql(database).replace(/`/g, '\\`')}\`);
+    await queryRunner.query(\`${escapeForTemplateLiteral(usersDropSql(database))}\`);
   }
 }
 `,
@@ -176,11 +180,11 @@ async function writeMikroMigration(targetDir, database) {
 
 export class Migration20220225111250 extends Migration {
   override async up(): Promise<void> {
-    this.addSql(\`${usersCreateSql(database).replace(/`/g, '\\`')}\`);
+    this.addSql(\`${escapeForTemplateLiteral(usersCreateSql(database))}\`);
   }
 
   override async down(): Promise<void> {
-    this.addSql(\`${usersDropSql(database).replace(/`/g, '\\`')}\`);
+    this.addSql(\`${escapeForTemplateLiteral(usersDropSql(database))}\`);
   }
 }
 `,
