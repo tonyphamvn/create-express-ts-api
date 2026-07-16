@@ -1,6 +1,6 @@
 {
   "name": "generate-express-ts-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Scaffold an Express + TypeScript API from the express-template boilerplate",
   "license": "MIT",
   "type": "module",
